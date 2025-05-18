@@ -84,15 +84,6 @@ This function:
 
 ---
 
-📝 **Notes**
-
-- Cookie and header values are included to mimic browser access.
-- The script is optimized for large-scale data extraction (e.g., millions of rows).
-- Designed to stream writes to CSVs to minimize RAM usage.
-- Re-running the script is safe — it will skip already-processed precincts.
-
----
-
 🧪 **Future Improvements**
 
 - Upload the raw CSV files for people to use in their own ETL projects

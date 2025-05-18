@@ -1,4 +1,4 @@
-# 🇵🇭 COMELEC 2025 Election Results Scraper
+# COMELEC 2025 Election Results Scraper (PH)
 
 This Python project is a scraper and ETL (Extract, Transform, Load) pipeline designed to gather precinct-level election results from the [COMELEC 2025 election results site](https://2025electionresults.comelec.gov.ph). It drills down from regions to precincts and extracts actual vote counts for senators and party-lists. 
 
@@ -32,6 +32,7 @@ pip install pandas requests
 ---
 
 🚀 How It Works
+
 **Step 1: Extract Locality Hierarchy**
 
 ```python
@@ -57,13 +58,27 @@ transform_er_data()
 This function:
 
 - Reads `precincts.csv` to determine the list of precincts
-- Skips precincts already processed (based on `precinct_info.csv`)
+- Skips precincts already processed using `check_data()` function.
+- Still works when process is interrupted
 - For each precinct, it fetches:
   - General vote data (registered, actual, valid ballots)
   - Senator-level votes
   - Party-list votes
-- Outputs are written to:
+- Outputs are written to the `data` folder:
   - `precinct_info.csv`
+  - `precinct_senators.csv`
+  - `precinct_partylist.csv`
+
+**Step 3: Clean and collate data into a single document (each)**
+```python
+pending, parties, senators = check_data()
+if len(pending) == 0:
+    collate(parties, senators)
+```
+This function:
+
+- calls `check_data()` before calling the `collate()` 
+- saves the following files to `data` folder:
   - `precinct_senators.csv`
   - `precinct_partylist.csv`
 
@@ -71,16 +86,16 @@ This function:
 
 📄 **Output Files**
 
-| File                    | Description                       |
-|-------------------------|----------------------------------|
-| `regions.csv`           | Region-level locality info        |
-| `provinces.csv`         | Provinces under each region       |
-| `cities.csv`            | Cities and municipalities         |
-| `baranggays.csv`        | Barangays under each city         |
-| `precincts.csv`         | List of precincts per barangay    |
-| `precinct_info.csv`     | Summary info per precinct         |
-| `precinct_senators.csv` | Senatorial vote count per precinct|
-| `precinct_partylist.csv`| Party-list vote count per precinct|
+| File                          | Description                          |
+|-------------------------------|--------------------------------------|
+| `./geo/regions.csv`           | Region-level locality info           |
+| `./geo/provinces.csv`         | Provinces under each region          |
+| `./geo/cities.csv`            | Cities and municipalities            |
+| `./geo/baranggays.csv`        | Barangays under each city            |
+| `./geo/precincts.csv`         | List of precincts per barangay       |
+| `./data/precinct_info.csv`    | Summary info per precinct            |
+| `./data/precinct_senators.csv`| Senatorial vote count per precinct   |
+| `./data/precinct_partylist.csv`| Party-list vote count per precinct   |
 
 ---
 
